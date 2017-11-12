@@ -1,0 +1,16 @@
+FROM ubuntu:14.04
+
+RUN apt-get -q update && \
+  apt-get -qy install build-essential git wget python && \
+  apt-get -y autoremove && \
+  apt-get -y clean && \
+  rm -rf /var/lib/apt/lists/* && \
+  rm -rf /tmp/* && \
+  git clone git://github.com/c9/core.git c9sdk && \
+  cd c9sdk && \
+  scripts/install-sdk.sh && \
+  mkdir /app
+
+WORKDIR c9sk
+
+CMD /root/.c9/node/bin/node /c9sdk/server.js --packed -w /app -p 8080 -l 0.0.0.0 -a :
